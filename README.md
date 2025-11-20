@@ -95,12 +95,14 @@ CREATE TABLE bets (
 );
 ```
 4. Configure the .env file in the backend:
+```sql
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=your_supersecretpassword
 DB_NAME=crash_game
 JWT_SECRET=your_secret_key
+```
 
 5.	Run the backend:
 cd backend
