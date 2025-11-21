@@ -1,6 +1,6 @@
 # 🎰 crash-game-qa-lab
 
-**Crash Game API & Frontend (QA & E2E Testing)**
+**Crash Game API & Frontend (E2E Testing)**
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)  
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-DB-blue.svg)](https://www.postgresql.org/)  
@@ -118,13 +118,16 @@ npm run dev
 
 ## 🧪 Test Scenarios (QA / E2E)
 
-| Scenario             | Description                                    | Expected Result                          |
-|---------------------|------------------------------------------------|------------------------------------------|
-| **Valid Bet**        | Logged-in user with enough balance bets $100  | Correct debit and bet recorded           |
-| **Invalid Bet**      | Logged-in user with insufficient balance bets $1000 | Bet rejected, balance unchanged      |
-| **Simulated Error**  | Force error via `/debug/simulate-error`       | Rollback applied, balance integrity maintained |
-| **WebSocket**        | Open 2 tabs, place a bet in one               | Real-time update reflected in the other tab |
-| **Data Reconciliation** | Compare `bets` and `wallet` after multiple bets | Data consistency ensured               |
+| Scenario                     | Description                                                                 | Expected Result                                             |
+|-------------------------------|-----------------------------------------------------------------------------|------------------------------------------------------------|
+| Valid Bet                     | User logged in with sufficient balance places a bet                         | Bet recorded, wallet debited correctly                     |
+| Invalid Bet                   | User logged in with insufficient balance places a bet                       | Bet rejected, wallet balance unchanged                     |
+| CreditPre Error 400           | Simulate a pre-credit error before transaction via `/debug/simulate-error` | Transaction rolled back, wallet unchanged                  |
+| DebitPre Error 400            | Simulate a pre-debit error before transaction via `/debug/simulate-error`  | Transaction rolled back, wallet unchanged                  |
+| Credit Server Error 500       | Simulate server error during or after credit operation                     | Retry logic applied, transaction rolled back if fails, wallet unchanged |
+| Debit Server Error 500        | Simulate server error during or after debit operation                      | Retry logic applied, transaction rolled back if fails, wallet unchanged |
+| WebSocket Real-Time Update    | Place bet in one tab while another is open                                   | Balance and bets updated in real-time across all clients  |
+| Data Reconciliation / Audit   | Compare bets and wallet balances after multiple bets, including errors     | Wallet and bets data consistent; no missing or double entries |
 
 
 
